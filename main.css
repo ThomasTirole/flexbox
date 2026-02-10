@@ -97,14 +97,15 @@ h1{ margin:0 0 4px; font-size:20px; }
 .form{ padding:12px; }
 .field{ display:grid; gap:8px; margin-bottom:12px; }
 .field__label{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:4px 10px;
     min-height:20px;
 }
 .field__label span{ font-size:13px; }
 .badge{
-    font-size:12px; color:var(--muted);
+    font-size:11px; color:var(--muted);
     border:1px solid var(--border);
-    padding:3px 8px;
+    padding:2px 6px;
     border-radius:999px;
     white-space:nowrap;
     background: color-mix(in oklab, var(--card), transparent 20%);
@@ -113,7 +114,7 @@ h1{ margin:0 0 4px; font-size:20px; }
 .nowrap{ white-space:nowrap; }
 
 .cols2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.cols3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.cols3{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
 @media (max-width:1100px){ .cols2, .cols3{ grid-template-columns:1fr; } }
 
 /* CONTROLS */
@@ -179,7 +180,7 @@ input[type="range"]{ accent-color:var(--accent); }
 .axesWrap{
     display:grid;
     grid-template-columns: 64px 1fr; /* rail gauche compact */
-    grid-template-rows: 28px 1fr;    /* rail haut plus fin => évite overlap */
+    grid-template-rows: 42px 1fr;    /* rail haut plus haut pour éviter overlap */
     gap: 10px;
     align-items: stretch;
     min-height: 0; /* important pour les grilles */
@@ -224,6 +225,7 @@ input[type="range"]{ accent-color:var(--accent); }
 .axis__line{
     position:absolute;
     border-radius:999px;
+    z-index: 1;
 }
 .axis__line::after{
     content:"";
@@ -243,6 +245,7 @@ input[type="range"]{ accent-color:var(--accent); }
     padding:3px 8px;
     border-radius:999px;
     white-space:nowrap;
+    z-index: 2;
 }
 
 /* Start/End */
@@ -256,6 +259,7 @@ input[type="range"]{ accent-color:var(--accent); }
     padding:2px 7px;
     border-radius:999px;
     white-space:nowrap;
+    z-index: 2;
 }
 
 /* Role colors */
@@ -357,14 +361,41 @@ input[type="range"]{ accent-color:var(--accent); }
     border-color: transparent transparent var(--axisMain) transparent;
 }
 
-/* wrap-reverse => cross axis start/end should swap (pills) */
-.axesWrap[data-wrap="wrap-reverse"] .axis[data-role="cross"] .axis__start{
+/* wrap-reverse => cross axis arrow should point opposite direction */
+/* LEFT axis (cross) with wrap-reverse => arrow points UP instead of down */
+.axesWrap[data-wrap="wrap-reverse"] .axis--left[data-role="cross"] .axis__line::after {
+    top: -10px;
+    bottom: auto;
+    border-width: 0 8px 12px 8px;
+    border-color: transparent transparent var(--axisCross) transparent;
+}
+
+/* TOP axis (cross) with wrap-reverse => arrow points LEFT instead of right */
+.axesWrap[data-wrap="wrap-reverse"] .axis--top[data-role="cross"] .axis__line::after {
+    left: -10px;
+    right: auto;
+    border-width: 8px 12px 8px 0;
+    border-color: transparent var(--axisCross) transparent transparent;
+}
+
+/* wrap-reverse => cross axis start/end should swap (pills) - LEFT axis */
+.axesWrap[data-wrap="wrap-reverse"] .axis--left[data-role="cross"] .axis__start{
     top: auto;
     bottom: 6px;
 }
-.axesWrap[data-wrap="wrap-reverse"] .axis[data-role="cross"] .axis__end{
+.axesWrap[data-wrap="wrap-reverse"] .axis--left[data-role="cross"] .axis__end{
     bottom: auto;
     top: 6px;
+}
+
+/* wrap-reverse => cross axis start/end should swap (pills) - TOP axis (mode column) */
+.axesWrap[data-wrap="wrap-reverse"] .axis--top[data-role="cross"] .axis__start{
+    left: auto;
+    right: 8px;
+}
+.axesWrap[data-wrap="wrap-reverse"] .axis--top[data-role="cross"] .axis__end{
+    right: auto;
+    left: 8px;
 }
 
 /* ITEMS */
