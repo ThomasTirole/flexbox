@@ -1,52 +1,323 @@
-const container = document.getElementById("container");
+const root = document.documentElement;
 
+// Theme
+const themeToggle = document.getElementById("themeToggle");
+
+// Axes
+const axesWrap = document.getElementById("axesWrap");
+const axisTop = document.getElementById("axisTop");
+const axisLeft = document.getElementById("axisLeft");
+
+// Container controls
+const container = document.getElementById("container");
 const direction = document.getElementById("direction");
 const justify = document.getElementById("justify");
-const align = document.getElementById("align");
+const alignItems = document.getElementById("alignItems");
 const wrap = document.getElementById("wrap");
+const alignContent = document.getElementById("alignContent");
 const gap = document.getElementById("gap");
+const containerW = document.getElementById("containerW");
+const containerH = document.getElementById("containerH");
+
+// Item controls
+const selectedItem = document.getElementById("selectedItem");
+const order = document.getElementById("order");
+const grow = document.getElementById("grow");
+const shrink = document.getElementById("shrink");
+const basis = document.getElementById("basis");
+const alignSelf = document.getElementById("alignSelf");
+const minW = document.getElementById("minW");
+const fontSize = document.getElementById("fontSize");
+const count = document.getElementById("count");
+const multiLine = document.getElementById("multiLine");
+
+// Labels
 const gapValue = document.getElementById("gapValue");
-const wideItems = document.getElementById("wideItems");
-const resetBtn = document.getElementById("reset");
+const wValue = document.getElementById("wValue");
+const hValue = document.getElementById("hValue");
+const orderValue = document.getElementById("orderValue");
+const growValue = document.getElementById("growValue");
+const shrinkValue = document.getElementById("shrinkValue");
+const minWValue = document.getElementById("minWValue");
+const fontValue = document.getElementById("fontValue");
+const countValue = document.getElementById("countValue");
+
 const cssOut = document.getElementById("cssOut");
+const resetBtn = document.getElementById("reset");
+const copyBtn = document.getElementById("copyBtn");
+
+// Per-item state
+let itemStates = [];
+let currentIndex = 0;
+
+function defaultItemState() {
+    return {
+        order: 0,
+        grow: 0,
+        shrink: 1,
+        basis: "auto",
+        alignSelf: "auto",
+        minW: 70,
+        fontSize: 16,
+    };
+}
+
+function colorClass(i) {
+    const n = (i % 12) + 1;
+    return `c${n}`;
+}
+
+function buildItems(n) {
+    container.innerHTML = "";
+    itemStates = Array.from({ length: n }, (_, i) => itemStates[i] ?? defaultItemState());
+
+    for (let i = 0; i < n; i++) {
+        const div = document.createElement("div");
+        div.className = `item ${colorClass(i)}`;
+        div.dataset.index = String(i);
+
+        if (i === 1) {
+            div.innerHTML = multiLine.checked ? `2<br><small>texte</small>` : `2 <small>texte</small>`;
+        } else {
+            div.textContent = String(i + 1);
+        }
+
+        div.addEventListener("click", () => {
+            currentIndex = i;
+            selectedItem.value = String(i);
+            syncItemControlsFromState();
+            apply();
+        });
+
+        container.appendChild(div);
+    }
+
+    selectedItem.innerHTML = "";
+    for (let i = 0; i < n; i++) {
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = `Item ${i + 1}`;
+        selectedItem.appendChild(opt);
+    }
+
+    if (currentIndex >= n) currentIndex = 0;
+    selectedItem.value = String(currentIndex);
+    syncItemControlsFromState();
+}
+
+function syncItemControlsFromState() {
+    const s = itemStates[currentIndex];
+
+    order.value = String(s.order);
+    grow.value = String(s.grow);
+    shrink.value = String(s.shrink);
+    basis.value = s.basis;
+    alignSelf.value = s.alignSelf;
+    minW.value = String(s.minW);
+    fontSize.value = String(s.fontSize);
+
+    orderValue.textContent = String(s.order);
+    growValue.textContent = String(s.grow);
+    shrinkValue.textContent = String(s.shrink);
+    minWValue.textContent = String(s.minW);
+    fontValue.textContent = String(s.fontSize);
+}
+
+function saveItemControlsToState() {
+    const s = itemStates[currentIndex];
+
+    s.order = Number(order.value);
+    s.grow = Number(grow.value);
+    s.shrink = Number(shrink.value);
+    s.basis = basis.value;
+    s.alignSelf = alignSelf.value;
+    s.minW = Number(minW.value);
+    s.fontSize = Number(fontSize.value);
+
+    orderValue.textContent = String(s.order);
+    growValue.textContent = String(s.grow);
+    shrinkValue.textContent = String(s.shrink);
+    minWValue.textContent = String(s.minW);
+    fontValue.textContent = String(s.fontSize);
+}
+
+/**
+ * Swap roles depending on flex-direction
+ * row/row-reverse: main=TOP, cross=LEFT
+ * column/column-reverse: main=LEFT, cross=TOP
+ */
+function updateAxesRoles(dir) {
+    const isRow = dir === "row" || dir === "row-reverse";
+    if (isRow) {
+        axisTop.dataset.role = "main";
+        axisLeft.dataset.role = "cross";
+        axisTop.querySelector(".axis__label").textContent = "Axe principal";
+        axisLeft.querySelector(".axis__label").textContent = "Axe secondaire";
+    } else {
+        axisTop.dataset.role = "cross";
+        axisLeft.dataset.role = "main";
+        axisTop.querySelector(".axis__label").textContent = "Axe secondaire";
+        axisLeft.querySelector(".axis__label").textContent = "Axe principal";
+    }
+}
 
 function apply() {
+    // container styles
     container.style.flexDirection = direction.value;
     container.style.justifyContent = justify.value;
-    container.style.alignItems = align.value;
+    container.style.alignItems = alignItems.value;
     container.style.flexWrap = wrap.value;
+    container.style.alignContent = alignContent.value;
+
     container.style.gap = `${gap.value}px`;
+    container.style.width = `${containerW.value}%`;
+    container.style.height = `${containerH.value}px`;
+
+    // axes metadata (direction + wrap)
+    axesWrap.dataset.dir = direction.value;
+    axesWrap.dataset.wrap = wrap.value;
+
+    // swap roles main/cross on column
+    updateAxesRoles(direction.value);
 
     gapValue.textContent = gap.value;
+    wValue.textContent = containerW.value;
+    hValue.textContent = containerH.value;
 
+    // items
     const items = container.querySelectorAll(".item");
-    items.forEach((it) => {
-        it.style.minWidth = wideItems.checked ? "160px" : "70px";
+    items.forEach((it, i) => {
+        const s = itemStates[i];
+
+        it.style.order = String(s.order);
+        it.style.flexGrow = String(s.grow);
+        it.style.flexShrink = String(s.shrink);
+        it.style.flexBasis = s.basis;
+        it.style.alignSelf = s.alignSelf;
+        it.style.minWidth = `${s.minW}px`;
+        it.style.fontSize = `${s.fontSize}px`;
+
+        it.classList.toggle("isSelected", i === currentIndex);
+
+        if (i === 1) {
+            it.innerHTML = multiLine.checked ? `2<br><small>texte</small>` : `2 <small>texte</small>`;
+        }
     });
 
+    // CSS output
+    const s = itemStates[currentIndex];
     cssOut.textContent =
-        `#container {
-  display: flex;                 /* default */
-  flex-direction: ${direction.value};        /* default: row */
-  justify-content: ${justify.value};       /* default: flex-start */
-  align-items: ${align.value};           /* default: stretch */
-  flex-wrap: ${wrap.value};              /* default: nowrap */
-  gap: ${gap.value}px;                    /* default: 0px */
+        `/* CONTAINER */
+#container {
+  display: flex;
+  flex-direction: ${direction.value};
+  justify-content: ${justify.value};
+  align-items: ${alignItems.value};
+  flex-wrap: ${wrap.value};
+  align-content: ${alignContent.value};
+  gap: ${gap.value}px;
+  width: ${containerW.value}%;
+  height: ${containerH.value}px;
+}
+
+/* ITEM SÉLECTIONNÉ (Item ${currentIndex + 1}) */
+#container .item:nth-child(${currentIndex + 1}) {
+  order: ${s.order};
+  flex-grow: ${s.grow};
+  flex-shrink: ${s.shrink};
+  flex-basis: ${s.basis};
+  align-self: ${s.alignSelf};
+  min-width: ${s.minW}px;
+  font-size: ${s.fontSize}px;
 }`;
 }
 
-resetBtn.addEventListener("click", () => {
+function setDefaults() {
     direction.value = "row";
     justify.value = "flex-start";
-    align.value = "stretch";
+    alignItems.value = "stretch";
     wrap.value = "nowrap";
-    gap.value = 12;          // volontairement pas 0, pour que ça se voie
-    wideItems.checked = false;
+    alignContent.value = "stretch";
+
+    gap.value = 12;
+    containerW.value = 100;
+    containerH.value = 360;
+
+    multiLine.checked = false;
+    currentIndex = 0;
+
+    const n = Number(count.value) || 5;
+    countValue.textContent = String(n);
+
+    itemStates = Array.from({ length: n }, () => defaultItemState());
+    buildItems(n);
+
     apply();
-});
+}
 
-[direction, justify, align, wrap, gap, wideItems].forEach((el) =>
-    el.addEventListener("input", apply)
-);
+// THEME
+function setTheme(theme) {
+    root.dataset.theme = theme;
+    localStorage.setItem("flex_sandbox_theme", theme);
+    themeToggle.textContent = (theme === "dark") ? "☀️ Mode clair" : "🌙 Mode sombre";
+}
+function initTheme() {
+    const saved = localStorage.getItem("flex_sandbox_theme");
+    setTheme(saved === "dark" ? "dark" : "light");
+}
 
-apply();
+function hook() {
+    themeToggle.addEventListener("click", () => {
+        setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    });
+
+    [direction, justify, alignItems, wrap, alignContent, gap, containerW, containerH].forEach(el =>
+        el.addEventListener("input", apply)
+    );
+
+    selectedItem.addEventListener("input", () => {
+        currentIndex = Number(selectedItem.value);
+        syncItemControlsFromState();
+        apply();
+    });
+
+    [order, grow, shrink, basis, alignSelf, minW, fontSize].forEach(el =>
+        el.addEventListener("input", () => {
+            saveItemControlsToState();
+            apply();
+        })
+    );
+
+    count.addEventListener("input", () => {
+        const n = Number(count.value);
+        countValue.textContent = String(n);
+        buildItems(n);
+        apply();
+    });
+
+    multiLine.addEventListener("input", apply);
+
+    resetBtn.addEventListener("click", setDefaults);
+
+    copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(cssOut.textContent).then(() => {
+            const iconSvg = copyBtn.querySelector("svg");
+            const originalIcon = iconSvg.innerHTML;
+
+            copyBtn.classList.add("copied");
+            copyBtn.querySelector("span").textContent = "Copié !";
+            iconSvg.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+
+            setTimeout(() => {
+                copyBtn.classList.remove("copied");
+                copyBtn.querySelector("span").textContent = "Copier";
+                iconSvg.innerHTML = originalIcon;
+            }, 2000);
+        });
+    });
+}
+
+// init
+initTheme();
+hook();
+setDefaults();
