@@ -123,9 +123,9 @@
 
                     <div class="field">
                         <div class="field__label">
-                            <span class="nowrap">hauteur: <strong><span id="hValue">320</span>px</strong></span>
+                            <span class="nowrap">hauteur: <strong><span id="hValue">360</span>px</strong></span>
                         </div>
-                        <input id="containerH" type="range" min="180" max="520" value="320" />
+                        <input id="containerH" type="range" min="220" max="640" value="360" />
                     </div>
                 </div>
             </div>
@@ -251,8 +251,8 @@
             </div>
 
             <div class="stage">
-                <div id="axesWrap" class="axesWrap" data-dir="row">
-                    <!-- Rail du haut -->
+                <div id="axesWrap" class="axesWrap" data-dir="row" data-wrap="nowrap">
+                    <!-- rail du haut -->
                     <div id="axisTop" class="axis axis--top" data-role="main">
                         <span class="axis__label">Axe principal</span>
                         <span class="axis__start">start</span>
@@ -260,7 +260,7 @@
                         <div class="axis__line"></div>
                     </div>
 
-                    <!-- Rail de gauche -->
+                    <!-- rail de gauche -->
                     <div id="axisLeft" class="axis axis--left" data-role="cross">
                         <span class="axis__label">Axe secondaire</span>
                         <span class="axis__start">start</span>
@@ -268,7 +268,7 @@
                         <div class="axis__line"></div>
                     </div>
 
-                    <!-- Le container -->
+                    <!-- container -->
                     <div id="container" class="container" aria-label="Flex container"></div>
                 </div>
             </div>

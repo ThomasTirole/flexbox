@@ -8,7 +8,7 @@ const axesWrap = document.getElementById("axesWrap");
 const axisTop = document.getElementById("axisTop");
 const axisLeft = document.getElementById("axisLeft");
 
-// Container
+// Container controls
 const container = document.getElementById("container");
 const direction = document.getElementById("direction");
 const justify = document.getElementById("justify");
@@ -141,13 +141,12 @@ function saveItemControlsToState() {
 }
 
 /**
- * Important: swap which rail is MAIN vs CROSS
- * - row / row-reverse => main = TOP (horizontal), cross = LEFT (vertical)
- * - column / column-reverse => main = LEFT (vertical), cross = TOP (horizontal)
+ * Swap roles depending on flex-direction
+ * row/row-reverse: main=TOP, cross=LEFT
+ * column/column-reverse: main=LEFT, cross=TOP
  */
 function updateAxesRoles(dir) {
     const isRow = dir === "row" || dir === "row-reverse";
-
     if (isRow) {
         axisTop.dataset.role = "main";
         axisLeft.dataset.role = "cross";
@@ -173,8 +172,11 @@ function apply() {
     container.style.width = `${containerW.value}%`;
     container.style.height = `${containerH.value}px`;
 
-    // axes direction + roles
+    // axes metadata (direction + wrap)
     axesWrap.dataset.dir = direction.value;
+    axesWrap.dataset.wrap = wrap.value;
+
+    // swap roles main/cross on column
     updateAxesRoles(direction.value);
 
     gapValue.textContent = gap.value;
@@ -238,7 +240,7 @@ function setDefaults() {
 
     gap.value = 12;
     containerW.value = 100;
-    containerH.value = 320;
+    containerH.value = 360;
 
     multiLine.checked = false;
     currentIndex = 0;
@@ -256,24 +258,16 @@ function setDefaults() {
 function setTheme(theme) {
     root.dataset.theme = theme;
     localStorage.setItem("flex_sandbox_theme", theme);
-
-    if (theme === "dark") {
-        themeToggle.textContent = "☀️ Mode clair";
-    } else {
-        themeToggle.textContent = "🌙 Mode sombre";
-    }
+    themeToggle.textContent = (theme === "dark") ? "☀️ Mode clair" : "🌙 Mode sombre";
 }
-
 function initTheme() {
     const saved = localStorage.getItem("flex_sandbox_theme");
-    if (saved === "dark" || saved === "light") setTheme(saved);
-    else setTheme("light");
+    setTheme(saved === "dark" ? "dark" : "light");
 }
 
 function hook() {
     themeToggle.addEventListener("click", () => {
-        const next = root.dataset.theme === "dark" ? "light" : "dark";
-        setTheme(next);
+        setTheme(root.dataset.theme === "dark" ? "light" : "dark");
     });
 
     [direction, justify, alignItems, wrap, alignContent, gap, containerW, containerH].forEach(el =>
