@@ -117,6 +117,26 @@ h1{ margin:0 0 4px; font-size:20px; }
 .cols3{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
 @media (max-width:1100px){ .cols2, .cols3{ grid-template-columns:1fr; } }
 
+/* Form sections with visual separators */
+.form__section{
+    padding-bottom:12px;
+    margin-bottom:12px;
+    border-bottom:1px solid var(--border);
+}
+.form__section:last-child{
+    padding-bottom:0;
+    margin-bottom:0;
+    border-bottom:none;
+}
+.form__section-title{
+    font-size:11px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin:0 0 10px;
+}
+
 /* CONTROLS */
 select, input[type="range"]{ width:100%; }
 select{
@@ -287,14 +307,14 @@ input[type="range"]{ accent-color:var(--accent); }
 .axis--left .axis__end{ left:50%; bottom:6px; transform:translateX(-50%); }
 
 /* top label + start/end */
-.axis--top .axis__label{ left:50%; top:4px; transform:translateX(-50%); }
-.axis--top .axis__start{ left:8px; top:50%; transform:translateY(-50%); }
-.axis--top .axis__end{ right:8px; top:50%; transform:translateY(-50%); }
+.axis--top .axis__label{ left:50%; top:2px; transform:translateX(-50%); }
+.axis--top .axis__start{ left:6px; top:50%; transform:translateY(-50%); }
+.axis--top .axis__end{ right:6px; top:50%; transform:translateY(-50%); }
 
-/* TOP rail line (horizontal) */
+/* TOP rail line (horizontal) - starts after start badge, ends before end badge */
 .axesWrap .axis--top .axis__line{
-    left: 28px; right: 28px;
-    top: 50%;
+    left: 48px; right: 48px;
+    top: 60%;
     height: 4px;
     transform: translateY(-50%);
 }
@@ -324,6 +344,16 @@ input[type="range"]{ accent-color:var(--accent); }
 }
 .axesWrap[data-dir="row-reverse"] .axis--top[data-role="main"] .axis__line::after{
     border-color: transparent var(--axisMain) transparent transparent;
+}
+
+/* row-reverse => swap start/end badges on TOP (main axis) */
+.axesWrap[data-dir="row-reverse"] .axis--top[data-role="main"] .axis__start{
+    left: auto;
+    right: 6px;
+}
+.axesWrap[data-dir="row-reverse"] .axis--top[data-role="main"] .axis__end{
+    right: auto;
+    left: 6px;
 }
 
 /* LEFT rail line (vertical) */
@@ -359,6 +389,16 @@ input[type="range"]{ accent-color:var(--accent); }
 }
 .axesWrap[data-dir="column-reverse"] .axis--left[data-role="main"] .axis__line::after{
     border-color: transparent transparent var(--axisMain) transparent;
+}
+
+/* column-reverse => swap start/end badges on LEFT (main axis) */
+.axesWrap[data-dir="column-reverse"] .axis--left[data-role="main"] .axis__start{
+    top: auto;
+    bottom: 6px;
+}
+.axesWrap[data-dir="column-reverse"] .axis--left[data-role="main"] .axis__end{
+    bottom: auto;
+    top: 6px;
 }
 
 /* wrap-reverse => cross axis arrow should point opposite direction */

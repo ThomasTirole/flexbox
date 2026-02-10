@@ -105,12 +105,21 @@
                     <p class="help">Agit surtout quand <strong>wrap</strong> crée plusieurs lignes.</p>
                 </div>
 
-                <div class="field">
-                    <div class="field__label">
-                        <span class="nowrap">gap: <strong><span id="gapValue">12</span>px</strong></span>
-                        <span class="badge">default: 0</span>
+                <div class="cols2">
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">gap: <strong><span id="gapValue">12</span>px</strong></span>
+                            <span class="badge">0</span>
+                        </div>
+                        <input id="gap" type="range" min="0" max="40" value="12" />
                     </div>
-                    <input id="gap" type="range" min="0" max="40" value="12" />
+
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">Nb items: <strong><span id="countValue">5</span></strong></span>
+                        </div>
+                        <input id="count" type="range" min="3" max="12" value="5" />
+                    </div>
                 </div>
 
                 <div class="cols2">
@@ -139,102 +148,108 @@
             </div>
 
             <div class="form">
-                <div class="cols2">
+                <!-- Section: Sélection -->
+                <div class="form__section">
+                    <p class="form__section-title">Sélection</p>
                     <div class="field">
-                        <div class="field__label"><span>Item</span></div>
+                        <div class="field__label"><span>Item à modifier</span></div>
                         <select id="selectedItem"></select>
                     </div>
+                </div>
 
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">Nombre d’items: <strong><span id="countValue">5</span></strong></span>
+                <!-- Section: Positionnement -->
+                <div class="form__section">
+                    <p class="form__section-title">Positionnement</p>
+                    <div class="cols2">
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">order: <strong><span id="orderValue">0</span></strong></span>
+                                <span class="badge">0</span>
+                            </div>
+                            <input id="order" type="range" min="-5" max="10" value="0" />
                         </div>
-                        <input id="count" type="range" min="3" max="12" value="5" />
+
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">align-self</span>
+                                <span class="badge">auto</span>
+                            </div>
+                            <select id="alignSelf">
+                                <option value="auto" selected>auto</option>
+                                <option value="stretch">stretch</option>
+                                <option value="flex-start">flex-start</option>
+                                <option value="center">center</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="baseline">baseline</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="cols2">
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">order: <strong><span id="orderValue">0</span></strong></span>
-                            <span class="badge">default: 0</span>
+                <!-- Section: Flex -->
+                <div class="form__section">
+                    <p class="form__section-title">Propriétés Flex</p>
+                    <div class="cols3">
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">grow: <strong><span id="growValue">0</span></strong></span>
+                                <span class="badge">0</span>
+                            </div>
+                            <input id="grow" type="range" min="0" max="5" value="0" />
                         </div>
-                        <input id="order" type="range" min="-5" max="10" value="0" />
-                    </div>
 
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">align-self</span>
-                            <span class="badge">default: auto</span>
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">shrink: <strong><span id="shrinkValue">1</span></strong></span>
+                                <span class="badge">1</span>
+                            </div>
+                            <input id="shrink" type="range" min="0" max="5" value="1" />
                         </div>
-                        <select id="alignSelf">
-                            <option value="auto" selected>auto</option>
-                            <option value="stretch">stretch</option>
-                            <option value="flex-start">flex-start</option>
-                            <option value="center">center</option>
-                            <option value="flex-end">flex-end</option>
-                            <option value="baseline">baseline</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="cols3">
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">flex-grow: <strong><span id="growValue">0</span></strong></span>
-                            <span class="badge">default: 0</span>
+                        <div class="field">
+                            <div class="field__label">
+                                <span>basis</span>
+                                <span class="badge">auto</span>
+                            </div>
+                            <select id="basis">
+                                <option value="auto" selected>auto</option>
+                                <option value="0">0</option>
+                                <option value="80px">80px</option>
+                                <option value="120px">120px</option>
+                                <option value="160px">160px</option>
+                                <option value="200px">200px</option>
+                                <option value="25%">25%</option>
+                                <option value="33.33%">33.33%</option>
+                                <option value="50%">50%</option>
+                            </select>
                         </div>
-                        <input id="grow" type="range" min="0" max="5" value="0" />
-                    </div>
-
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">flex-shrink: <strong><span id="shrinkValue">1</span></strong></span>
-                            <span class="badge">default: 1</span>
-                        </div>
-                        <input id="shrink" type="range" min="0" max="5" value="1" />
-                    </div>
-
-                    <div class="field">
-                        <div class="field__label">
-                            <span>flex-basis</span>
-                            <span class="badge">default: auto</span>
-                        </div>
-                        <select id="basis">
-                            <option value="auto" selected>auto</option>
-                            <option value="0">0</option>
-                            <option value="80px">80px</option>
-                            <option value="120px">120px</option>
-                            <option value="160px">160px</option>
-                            <option value="200px">200px</option>
-                            <option value="25%">25%</option>
-                            <option value="33.33%">33.33%</option>
-                            <option value="50%">50%</option>
-                        </select>
                     </div>
                 </div>
 
-                <div class="cols2">
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">min-width: <strong><span id="minWValue">70</span>px</strong></span>
+                <!-- Section: Dimensions & Démo -->
+                <div class="form__section">
+                    <p class="form__section-title">Dimensions & Démo</p>
+                    <div class="cols2">
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">min-width: <strong><span id="minWValue">70</span>px</strong></span>
+                            </div>
+                            <input id="minW" type="range" min="40" max="240" value="70" />
                         </div>
-                        <input id="minW" type="range" min="40" max="240" value="70" />
+
+                        <div class="field">
+                            <div class="field__label">
+                                <span class="nowrap">font-size: <strong><span id="fontValue">16</span>px</strong></span>
+                            </div>
+                            <input id="fontSize" type="range" min="12" max="36" value="16" />
+                        </div>
                     </div>
 
-                    <div class="field">
-                        <div class="field__label">
-                            <span class="nowrap">font-size: <strong><span id="fontValue">16</span>px</strong></span>
-                        </div>
-                        <input id="fontSize" type="range" min="12" max="36" value="16" />
-                        <p class="help">Utile pour voir <strong>baseline</strong>.</p>
-                    </div>
+                    <label class="toggle">
+                        <input id="multiLine" type="checkbox" />
+                        <span>Item 2 multi-ligne (démo baseline)</span>
+                    </label>
                 </div>
-
-                <label class="toggle">
-                    <input id="multiLine" type="checkbox" />
-                    <span>Item 2 en multi-ligne (démo baseline)</span>
-                </label>
             </div>
         </article>
     </section>
