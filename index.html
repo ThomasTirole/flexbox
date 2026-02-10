@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flexbox Playground</title>
+    <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+
+<h1>Flexbox Playground</h1>
+<p class="hint">
+    Change les options et observe le conteneur. (Astuce : coche “Items plus larges” pour mieux voir wrap.)
+</p>
+
+<div class="panel">
+    <label>
+        flex-direction
+        <select id="direction">
+            <option value="row" selected>row (default)</option>
+            <option value="row-reverse">row-reverse</option>
+            <option value="column">column</option>
+            <option value="column-reverse">column-reverse</option>
+        </select>
+    </label>
+
+    <label>
+        justify-content (axe principal)
+        <select id="justify">
+            <option value="flex-start" selected>flex-start (default)</option>
+            <option value="center">center</option>
+            <option value="flex-end">flex-end</option>
+            <option value="space-between">space-between</option>
+            <option value="space-around">space-around</option>
+            <option value="space-evenly">space-evenly</option>
+        </select>
+    </label>
+
+    <label>
+        align-items (axe secondaire)
+        <select id="align">
+            <option value="stretch" selected>stretch (default)</option>
+            <option value="flex-start">flex-start</option>
+            <option value="center">center</option>
+            <option value="flex-end">flex-end</option>
+            <option value="baseline">baseline</option>
+        </select>
+    </label>
+
+    <label>
+        flex-wrap
+        <select id="wrap">
+            <option value="nowrap" selected>nowrap (default)</option>
+            <option value="wrap">wrap</option>
+            <option value="wrap-reverse">wrap-reverse</option>
+        </select>
+    </label>
+
+    <label class="range">
+        gap : <span id="gapValue">12</span>px
+        <input id="gap" type="range" min="0" max="40" value="12" />
+        <small class="muted">gap = 0px (default). Ici on démarre à 12px pour mieux voir.</small>
+    </label>
+
+    <label class="check">
+        <input id="wideItems" type="checkbox" />
+        Items plus larges (mieux pour wrap)
+    </label>
+
+    <button id="reset" type="button">Reset</button>
+</div>
+
+<div class="stage">
+    <div id="container" class="container">
+        <div class="item i1">1</div>
+        <div class="item i2">2<br><small>texte</small></div>
+        <div class="item i3">3</div>
+        <div class="item i4">4</div>
+        <div class="item i5">5</div>
+    </div>
+</div>
+
+<pre class="code"><code id="cssOut"></code></pre>
+
+<script src="index.js"></script>
+</body>
+</html>

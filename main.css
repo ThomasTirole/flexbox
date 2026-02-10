@@ -1,0 +1,105 @@
+* { box-sizing: border-box; }
+
+body {
+    font-family: system-ui, Arial, sans-serif;
+    margin: 20px;
+    color: #111;
+}
+
+h1 { margin: 0 0 6px; }
+
+.hint {
+    margin: 0 0 14px;
+    opacity: 0.85;
+}
+
+.muted { opacity: 0.75; font-size: 12px; }
+
+.panel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+}
+
+select, button {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    background: white;
+}
+
+.range { grid-column: span 2; }
+
+.check {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+button {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.stage {
+    border: 2px dashed #bbb;
+    border-radius: 12px;
+    padding: 14px;
+    height: 320px; /* utile pour voir align-items et column */
+}
+
+.container {
+    height: 100%;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 12px;
+
+    /* Valeurs initiales (pilotées en JS) */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 12px; /* (default = 0) - ici on met 12px pour mieux voir */
+}
+
+.item {
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 12px;
+    min-width: 70px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.item small {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Couleurs simples pour distinguer les items */
+.i1 { background: #d7ecff; }
+.i2 { background: #ffe3d7; }
+.i3 { background: #e3ffd7; }
+.i4 { background: #f0d7ff; }
+.i5 { background: #fff7d7; }
+
+.code {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    overflow: auto;
+}
