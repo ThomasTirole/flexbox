@@ -71,7 +71,13 @@ h1{ margin:0 0 4px; font-size:20px; }
 @media (max-width:1100px){ .app{ grid-template-columns:1fr; } }
 
 .controls{ display:grid; gap:14px; }
-.stageArea{ display:grid; gap:14px; }
+.stageArea{
+    display:grid; gap:14px;
+    position:sticky;
+    top:80px; /* topbar height + margin */
+    align-self:start;
+}
+@media (max-width:1100px){ .stageArea{ position:static; } }
 
 .card, .stageCard{
     background: linear-gradient(180deg, var(--card), var(--card2));
@@ -178,6 +184,30 @@ input[type="range"]{ accent-color:var(--accent); }
     background: color-mix(in oklab, var(--accent), transparent 75%);
 }
 .btn--primary:hover{ background: color-mix(in oklab, var(--accent), transparent 65%); }
+
+.btn--copy{
+    display:flex; align-items:center; gap:6px;
+    padding:6px 10px;
+    font-size:12px;
+    font-weight:600;
+    transition: all 0.3s ease;
+}
+.btn--copy svg{
+    flex-shrink:0;
+    transition: transform 0.3s ease;
+}
+.btn--copy span{
+    transition: opacity 0.2s ease;
+}
+.btn--copy.copied{
+    border-color: color-mix(in oklab, #10b981, #000 40%);
+    background: color-mix(in oklab, #10b981, transparent 75%);
+    color: #10b981;
+    box-shadow: 0 0 12px color-mix(in oklab, #10b981, transparent 70%);
+}
+.btn--copy.copied svg{
+    transform: scale(1.15);
+}
 
 /* STAGE */
 .stageHint{
@@ -480,8 +510,10 @@ html[data-theme="dark"] .item{ color: rgba(10,18,34,0.92); }
     border-radius:12px;
     background: color-mix(in oklab, var(--bg), #000 10%);
     border:1px solid var(--border);
-    overflow:auto;
+    overflow-y:auto;
+    max-height:200px;
     color:var(--text);
     font-size:12px;
     line-height:1.4;
 }
+@media (max-width:1100px){ .code{ max-height:none; } }

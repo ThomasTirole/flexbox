@@ -44,6 +44,7 @@ const countValue = document.getElementById("countValue");
 
 const cssOut = document.getElementById("cssOut");
 const resetBtn = document.getElementById("reset");
+const copyBtn = document.getElementById("copyBtn");
 
 // Per-item state
 let itemStates = [];
@@ -297,6 +298,23 @@ function hook() {
     multiLine.addEventListener("input", apply);
 
     resetBtn.addEventListener("click", setDefaults);
+
+    copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(cssOut.textContent).then(() => {
+            const iconSvg = copyBtn.querySelector("svg");
+            const originalIcon = iconSvg.innerHTML;
+
+            copyBtn.classList.add("copied");
+            copyBtn.querySelector("span").textContent = "Copié !";
+            iconSvg.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+
+            setTimeout(() => {
+                copyBtn.classList.remove("copied");
+                copyBtn.querySelector("span").textContent = "Copier";
+                iconSvg.innerHTML = originalIcon;
+            }, 2000);
+        });
+    });
 }
 
 // init
