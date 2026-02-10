@@ -1,13 +1,70 @@
 * { box-sizing: border-box; }
 
-:root{
+:root { color-scheme: light; }
+
+/* =========================
+   THEMES
+========================= */
+html[data-theme="light"]{
+    color-scheme: light;
+
+    --bg: #f6f7fb;
+    --bg2: #eef1ff;
+    --text: #111827;
+    --muted: #4b5563;
+
+    --card: rgba(255,255,255,0.90);
+    --card2: rgba(255,255,255,0.70);
+    --border: rgba(17,24,39,0.12);
+    --shadow: 0 10px 25px rgba(17,24,39,0.10);
+
+    --pill: rgba(255,255,255,0.85);
+    --pillBorder: rgba(17,24,39,0.12);
+
+    --accent: #6d28d9;     /* violet */
+    --accent2: #0891b2;    /* cyan */
+    --focus: rgba(109,40,217,0.25);
+
+    --selectBg: rgba(255,255,255,0.98);
+    --selectText: #111827;
+    --optionBg: #ffffff;
+    --optionText: #111827;
+
+    --stageBg: rgba(255,255,255,0.55);
+
+    --axisMain: #ff2e93;   /* fuchsia très contrasté */
+    --axisCross: #00b7ff;  /* cyan très contrasté */
+}
+
+html[data-theme="dark"]{
+    color-scheme: dark;
+
     --bg: #0b1220;
-    --panel: rgba(255,255,255,0.08);
-    --panel2: rgba(255,255,255,0.06);
+    --bg2: #141c2e;
     --text: rgba(255,255,255,0.92);
     --muted: rgba(255,255,255,0.70);
+
+    --card: rgba(255,255,255,0.10);
+    --card2: rgba(255,255,255,0.06);
     --border: rgba(255,255,255,0.14);
     --shadow: 0 12px 30px rgba(0,0,0,0.35);
+
+    --pill: rgba(255,255,255,0.10);
+    --pillBorder: rgba(255,255,255,0.14);
+
+    --accent: rgba(140, 80, 255, 0.95);
+    --accent2: rgba(0, 210, 255, 0.95);
+    --focus: rgba(140, 80, 255, 0.35);
+
+    --selectBg: rgba(255,255,255,0.10);
+    --selectText: rgba(255,255,255,0.92);
+    --optionBg: #111827;
+    --optionText: rgba(255,255,255,0.92);
+
+    --stageBg: rgba(0,0,0,0.12);
+
+    --axisMain: #ff2e93;
+    --axisCross: #00d2ff;
 }
 
 body{
@@ -15,18 +72,21 @@ body{
     font-family: system-ui, Arial, sans-serif;
     color: var(--text);
     background:
-            radial-gradient(900px 500px at 10% 10%, rgba(140, 80, 255, 0.25), transparent 60%),
-            radial-gradient(700px 500px at 90% 20%, rgba(0, 210, 255, 0.20), transparent 60%),
-            radial-gradient(900px 600px at 50% 110%, rgba(255, 180, 0, 0.18), transparent 60%),
-            var(--bg);
+            radial-gradient(900px 500px at 10% 10%, rgba(109,40,217,0.18), transparent 60%),
+            radial-gradient(700px 500px at 90% 20%, rgba(8,145,178,0.14), transparent 60%),
+            radial-gradient(900px 600px at 50% 110%, rgba(245,158,11,0.12), transparent 60%),
+            linear-gradient(180deg, var(--bg2), var(--bg));
 }
 
+/* =========================
+   HEADER
+========================= */
 .topbar{
     position: sticky;
     top: 0;
     z-index: 10;
     backdrop-filter: blur(10px);
-    background: rgba(10, 18, 34, 0.55);
+    background: color-mix(in oklab, var(--card), transparent 35%);
     border-bottom: 1px solid var(--border);
 }
 
@@ -40,17 +100,18 @@ body{
     gap: 12px;
 }
 
-h1{
-    margin: 0 0 4px;
-    font-size: 20px;
-    letter-spacing: 0.2px;
-}
-.subtitle{
-    margin: 0;
-    color: var(--muted);
-    font-size: 13px;
+.topbar__actions{
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
+h1{ margin: 0 0 4px; font-size: 20px; }
+.subtitle{ margin: 0; color: var(--muted); font-size: 13px; }
+
+/* =========================
+   LAYOUT
+========================= */
 .app{
     max-width: 1200px;
     margin: 0 auto;
@@ -65,45 +126,41 @@ h1{
     .app{ grid-template-columns: 1fr; }
 }
 
-.controls{
-    display: grid;
-    gap: 14px;
-}
+.controls{ display: grid; gap: 14px; }
+.stageArea{ display: grid; gap: 14px; }
 
-.card{
-    background: linear-gradient(180deg, var(--panel), var(--panel2));
+.card, .stageCard{
+    background: linear-gradient(180deg, var(--card), var(--card2));
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: var(--shadow);
     overflow: hidden;
 }
 
-.card__head{
+.card__head, .stageHead{
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 12px 12px;
+    padding: 12px;
     border-bottom: 1px solid var(--border);
 }
 
-.card__head h2{
+.card__head h2, .stageHead h2{
     margin: 0;
     font-size: 15px;
 }
 
 .pill{
     font-size: 12px;
-    color: rgba(255,255,255,0.85);
-    border: 1px solid var(--border);
+    background: var(--pill);
+    border: 1px solid var(--pillBorder);
     padding: 5px 8px;
     border-radius: 999px;
     white-space: nowrap;
 }
 
-.form{
-    padding: 12px;
-}
+.form{ padding: 12px; }
 
 .field{
     display: grid;
@@ -119,83 +176,69 @@ h1{
     min-height: 20px;
 }
 
-.field__label span{
-    color: rgba(255,255,255,0.90);
-    font-size: 13px;
-}
-
+.field__label span{ font-size: 13px; }
 .badge{
     font-size: 12px;
-    color: rgba(255,255,255,0.78);
+    color: var(--muted);
     border: 1px solid var(--border);
     padding: 3px 8px;
     border-radius: 999px;
     white-space: nowrap;
+    background: color-mix(in oklab, var(--card), transparent 20%);
 }
-
 .help{
     margin: -4px 0 0;
     color: var(--muted);
     font-size: 12px;
 }
-
 .nowrap{ white-space: nowrap; }
 
-select, input[type="range"]{
-    width: 100%;
-}
-
-select{
-    padding: 10px 10px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.08);
-    color: var(--text);
-    outline: none;
-}
-
-select:focus, input[type="range"]:focus{
-    outline: 2px solid rgba(140, 80, 255, 0.45);
-    outline-offset: 2px;
-}
-
-input[type="range"]{
-    accent-color: rgba(140, 80, 255, 0.85);
-}
-
-.cols2{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.cols3{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-}
-
+.cols2{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cols3{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 @media (max-width: 1100px){
     .cols2, .cols3{ grid-template-columns: 1fr; }
 }
+
+/* =========================
+   CONTROLS
+========================= */
+select, input[type="range"]{ width: 100%; }
+
+select{
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--selectBg);
+    color: var(--selectText);
+    outline: none;
+}
+
+select option{
+    background: var(--optionBg);
+    color: var(--optionText);
+}
+
+select:focus, input[type="range"]:focus{
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+input[type="range"]{ accent-color: var(--accent); }
 
 .toggle{
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 10px;
+    padding: 10px;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.90);
+    background: color-mix(in oklab, var(--card), transparent 10%);
     font-size: 13px;
 }
 
-.toggle input{ transform: scale(1.05); }
-
 .btn{
     border: 1px solid var(--border);
-    background: rgba(255,255,255,0.08);
+    background: color-mix(in oklab, var(--card), transparent 10%);
     color: var(--text);
     padding: 10px 12px;
     border-radius: 12px;
@@ -203,44 +246,17 @@ input[type="range"]{
     font-weight: 700;
     white-space: nowrap;
 }
-
-.btn:hover{ background: rgba(255,255,255,0.12); }
+.btn:hover{ background: color-mix(in oklab, var(--card), transparent 0%); }
 
 .btn--primary{
-    border-color: rgba(255,255,255,0.30);
-    background: rgba(140, 80, 255, 0.30);
+    border-color: color-mix(in oklab, var(--accent), #000 65%);
+    background: color-mix(in oklab, var(--accent), transparent 75%);
 }
-.btn--primary:hover{
-    background: rgba(140, 80, 255, 0.42);
-}
+.btn--primary:hover{ background: color-mix(in oklab, var(--accent), transparent 65%); }
 
-.stageArea{
-    display: grid;
-    gap: 14px;
-}
-
-.stageCard{
-    background: linear-gradient(180deg, var(--panel), var(--panel2));
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-}
-
-.stageHead{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-.stageHead h2{
-    margin: 0;
-    font-size: 15px;
-}
-
+/* =========================
+   STAGE
+========================= */
 .stageHint{
     display: flex;
     align-items: center;
@@ -252,19 +268,55 @@ input[type="range"]{
 .dot{
     width: 8px; height: 8px;
     border-radius: 999px;
-    background: rgba(0, 210, 255, 0.9);
-    box-shadow: 0 0 0 3px rgba(0,210,255,0.15);
+    background: var(--accent2);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent2), transparent 80%);
 }
 
 .stage{
     padding: 14px;
-    background: rgba(0,0,0,0.10);
+    background: var(--stageBg);
 }
 
+/* =========================
+   AXES OUTSIDE (compact)
+========================= */
+.axesWrap{
+    display: grid;
+    grid-template-columns: 72px 1fr;  /* rail gauche compact */
+    grid-template-rows: 32px 1fr;     /* rail haut compact */
+    gap: 10px;
+    align-items: stretch;
+}
+
+.axis{
+    position: relative;
+    border: 1px solid color-mix(in oklab, var(--border), transparent 0%);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--card), transparent 10%);
+    overflow: hidden;
+}
+
+/* Top rail: full width above container */
+.axis--top{
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Left rail: full height left of container */
+.axis--left{
+    grid-column: 1;
+    grid-row: 2;
+}
+
+/* Container: dotted frame */
 .container{
+    grid-column: 2;
+    grid-row: 2;
+
+    position: relative;
     width: 100%;
-    height: 320px; /* modifié via JS */
-    border: 1px dashed rgba(255,255,255,0.35);
+    height: 320px; /* JS */
+    border: 1px dashed color-mix(in oklab, var(--text), transparent 65%);
     border-radius: 14px;
     padding: 12px;
 
@@ -278,30 +330,195 @@ input[type="range"]{
     gap: 12px;
 }
 
+/* Axis line + arrow */
+.axis__line{
+    position: absolute;
+    border-radius: 999px;
+}
+.axis__line::after{
+    content:"";
+    position:absolute;
+    width:0; height:0;
+    border-style: solid;
+}
+
+/* Axis label */
+.axis__label{
+    position: absolute;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text);
+    background: color-mix(in oklab, var(--card), transparent 0%);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* Start/End pills */
+.axis__start, .axis__end{
+    position: absolute;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text);
+    background: color-mix(in oklab, var(--card), transparent 0%);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* Role colors */
+.axis[data-role="main"] .axis__line{
+    background: var(--axisMain);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--axisMain), transparent 82%);
+}
+.axis[data-role="cross"] .axis__line{
+    background: var(--axisCross);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--axisCross), transparent 82%);
+}
+
+/* Rotate left label for space */
+.axis--left .axis__label{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 4px;
+}
+
+/* Left rail start/end compact */
+.axis--left .axis__start{
+    left: 50%;
+    top: 6px;
+    transform: translateX(-50%);
+}
+.axis--left .axis__end{
+    left: 50%;
+    bottom: 6px;
+    transform: translateX(-50%);
+}
+
+/* Top rail label */
+.axis--top .axis__label{
+    left: 50%;
+    top: 6px;
+    transform: translateX(-50%);
+}
+.axis--top .axis__start{
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.axis--top .axis__end{
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* =========================
+   ORIENTATION BY data-dir
+   - Top rail always horizontal
+   - Left rail always vertical
+   - Arrow direction depends on row/row-reverse/column/column-reverse
+========================= */
+
+/* TOP RAIL = horizontal arrow */
+.axesWrap .axis--top .axis__line{
+    left: 28px; right: 28px;
+    top: 50%;
+    height: 4px;
+    transform: translateY(-50%);
+}
+
+/* default arrowhead points right (end) */
+.axesWrap .axis--top .axis__line::after{
+    right: -10px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent currentColor;
+}
+
+/* we can't use currentColor on background, so we set per role */
+.axis--top[data-role="main"] .axis__line::after{
+    border-color: transparent transparent transparent var(--axisMain);
+}
+.axis--top[data-role="cross"] .axis__line::after{
+    border-color: transparent transparent transparent var(--axisCross);
+}
+
+/* row-reverse => top rail arrow points LEFT */
+.axesWrap[data-dir="row-reverse"] .axis--top .axis__line::after{
+    left: -10px; right: auto;
+    border-width: 8px 12px 8px 0;
+    border-color: transparent var(--axisMain) transparent transparent; /* overwritten below per role */
+}
+.axesWrap[data-dir="row-reverse"] .axis--top[data-role="cross"] .axis__line::after{
+    border-color: transparent var(--axisCross) transparent transparent;
+}
+.axesWrap[data-dir="row-reverse"] .axis--top[data-role="main"] .axis__line::after{
+    border-color: transparent var(--axisMain) transparent transparent;
+}
+
+/* LEFT RAIL = vertical arrow */
+.axesWrap .axis--left .axis__line{
+    top: 28px; bottom: 28px;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+}
+
+/* default arrowhead points down */
+.axesWrap .axis--left .axis__line::after{
+    bottom: -10px; left: 50%;
+    transform: translateX(-50%);
+    border-width: 12px 8px 0 8px;
+    border-color: currentColor transparent transparent transparent;
+}
+.axis--left[data-role="main"] .axis__line::after{
+    border-color: var(--axisMain) transparent transparent transparent;
+}
+.axis--left[data-role="cross"] .axis__line::after{
+    border-color: var(--axisCross) transparent transparent transparent;
+}
+
+/* column-reverse => left rail arrow points UP */
+.axesWrap[data-dir="column-reverse"] .axis--left .axis__line::after{
+    top: -10px; bottom: auto;
+    border-width: 0 8px 12px 8px;
+    border-color: transparent transparent var(--axisMain) transparent; /* overwritten below per role */
+}
+.axesWrap[data-dir="column-reverse"] .axis--left[data-role="cross"] .axis__line::after{
+    border-color: transparent transparent var(--axisCross) transparent;
+}
+.axesWrap[data-dir="column-reverse"] .axis--left[data-role="main"] .axis__line::after{
+    border-color: transparent transparent var(--axisMain) transparent;
+}
+
+/* =========================
+   ITEMS
+========================= */
 .item{
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid color-mix(in oklab, var(--text), transparent 70%);
     border-radius: 14px;
     padding: 12px;
-    min-width: 70px; /* modifié via JS */
+    min-width: 70px;
     text-align: center;
     font-weight: 900;
     line-height: 1.1;
-    color: rgba(10, 18, 34, 0.92);
     user-select: none;
-    box-shadow: 0 10px 18px rgba(0,0,0,0.22);
+    box-shadow: 0 10px 18px color-mix(in oklab, #000, transparent 80%);
 }
 
-.item small{
-    font-weight: 600;
-    opacity: 0.75;
-}
+.item small{ font-weight: 700; opacity: 0.75; }
 
 .item.isSelected{
-    outline: 3px solid rgba(255,255,255,0.90);
+    outline: 3px solid color-mix(in oklab, var(--accent2), #fff 20%);
     outline-offset: 2px;
 }
 
-/* Couleurs par item (style “avant”) */
+/* palette */
 .item.c1{ background: linear-gradient(135deg, #d7ecff, #a8d4ff); }
 .item.c2{ background: linear-gradient(135deg, #ffe3d7, #ffb9a8); }
 .item.c3{ background: linear-gradient(135deg, #e3ffd7, #b5ffa8); }
@@ -315,14 +532,21 @@ input[type="range"]{
 .item.c11{ background: linear-gradient(135deg, #e7d7ff, #b99fff); }
 .item.c12{ background: linear-gradient(135deg, #d7fff0, #9fffd3); }
 
+/* text color depending theme */
+html[data-theme="light"] .item{ color: rgba(17,24,39,0.92); }
+html[data-theme="dark"] .item{ color: rgba(10,18,34,0.92); }
+
+/* =========================
+   CODE OUTPUT
+========================= */
 .code{
     margin: 0;
     padding: 12px;
     border-radius: 12px;
-    background: rgba(0,0,0,0.25);
+    background: color-mix(in oklab, var(--bg), #000 10%);
     border: 1px solid var(--border);
     overflow: auto;
-    color: rgba(255,255,255,0.92);
+    color: var(--text);
     font-size: 12px;
     line-height: 1.4;
 }

@@ -1,6 +1,15 @@
-const container = document.getElementById("container");
+const root = document.documentElement;
 
-// Container controls
+// Theme
+const themeToggle = document.getElementById("themeToggle");
+
+// Axes
+const axesWrap = document.getElementById("axesWrap");
+const axisTop = document.getElementById("axisTop");
+const axisLeft = document.getElementById("axisLeft");
+
+// Container
+const container = document.getElementById("container");
 const direction = document.getElementById("direction");
 const justify = document.getElementById("justify");
 const alignItems = document.getElementById("alignItems");
@@ -26,7 +35,6 @@ const multiLine = document.getElementById("multiLine");
 const gapValue = document.getElementById("gapValue");
 const wValue = document.getElementById("wValue");
 const hValue = document.getElementById("hValue");
-
 const orderValue = document.getElementById("orderValue");
 const growValue = document.getElementById("growValue");
 const shrinkValue = document.getElementById("shrinkValue");
@@ -37,7 +45,7 @@ const countValue = document.getElementById("countValue");
 const cssOut = document.getElementById("cssOut");
 const resetBtn = document.getElementById("reset");
 
-// Per-item state (so switching selection doesn’t lose settings)
+// Per-item state
 let itemStates = [];
 let currentIndex = 0;
 
@@ -54,15 +62,12 @@ function defaultItemState() {
 }
 
 function colorClass(i) {
-    // c1..c12 (boucle)
     const n = (i % 12) + 1;
     return `c${n}`;
 }
 
 function buildItems(n) {
     container.innerHTML = "";
-
-    // keep existing states when possible
     itemStates = Array.from({ length: n }, (_, i) => itemStates[i] ?? defaultItemState());
 
     for (let i = 0; i < n; i++) {
@@ -70,7 +75,6 @@ function buildItems(n) {
         div.className = `item ${colorClass(i)}`;
         div.dataset.index = String(i);
 
-        // content
         if (i === 1) {
             div.innerHTML = multiLine.checked ? `2<br><small>texte</small>` : `2 <small>texte</small>`;
         } else {
@@ -87,7 +91,6 @@ function buildItems(n) {
         container.appendChild(div);
     }
 
-    // rebuild select list
     selectedItem.innerHTML = "";
     for (let i = 0; i < n; i++) {
         const opt = document.createElement("option");
@@ -137,6 +140,27 @@ function saveItemControlsToState() {
     fontValue.textContent = String(s.fontSize);
 }
 
+/**
+ * Important: swap which rail is MAIN vs CROSS
+ * - row / row-reverse => main = TOP (horizontal), cross = LEFT (vertical)
+ * - column / column-reverse => main = LEFT (vertical), cross = TOP (horizontal)
+ */
+function updateAxesRoles(dir) {
+    const isRow = dir === "row" || dir === "row-reverse";
+
+    if (isRow) {
+        axisTop.dataset.role = "main";
+        axisLeft.dataset.role = "cross";
+        axisTop.querySelector(".axis__label").textContent = "Axe principal";
+        axisLeft.querySelector(".axis__label").textContent = "Axe secondaire";
+    } else {
+        axisTop.dataset.role = "cross";
+        axisLeft.dataset.role = "main";
+        axisTop.querySelector(".axis__label").textContent = "Axe secondaire";
+        axisLeft.querySelector(".axis__label").textContent = "Axe principal";
+    }
+}
+
 function apply() {
     // container styles
     container.style.flexDirection = direction.value;
@@ -149,11 +173,15 @@ function apply() {
     container.style.width = `${containerW.value}%`;
     container.style.height = `${containerH.value}px`;
 
+    // axes direction + roles
+    axesWrap.dataset.dir = direction.value;
+    updateAxesRoles(direction.value);
+
     gapValue.textContent = gap.value;
     wValue.textContent = containerW.value;
     hValue.textContent = containerH.value;
 
-    // apply item states to DOM
+    // items
     const items = container.querySelectorAll(".item");
     items.forEach((it, i) => {
         const s = itemStates[i];
@@ -173,36 +201,35 @@ function apply() {
         }
     });
 
-    // show CSS output (container + selected item)
+    // CSS output
     const s = itemStates[currentIndex];
     cssOut.textContent =
         `/* CONTAINER */
 #container {
-  display: flex;                 /* default */
-  flex-direction: ${direction.value};        /* default: row */
-  justify-content: ${justify.value};       /* default: flex-start */
-  align-items: ${alignItems.value};           /* default: stretch */
-  flex-wrap: ${wrap.value};              /* default: nowrap */
-  align-content: ${alignContent.value};      /* default: stretch (utile si wrap + lignes) */
-  gap: ${gap.value}px;                    /* default: 0 */
+  display: flex;
+  flex-direction: ${direction.value};
+  justify-content: ${justify.value};
+  align-items: ${alignItems.value};
+  flex-wrap: ${wrap.value};
+  align-content: ${alignContent.value};
+  gap: ${gap.value}px;
   width: ${containerW.value}%;
   height: ${containerH.value}px;
 }
 
 /* ITEM SÉLECTIONNÉ (Item ${currentIndex + 1}) */
 #container .item:nth-child(${currentIndex + 1}) {
-  order: ${s.order};               /* default: 0 */
-  flex-grow: ${s.grow};            /* default: 0 */
-  flex-shrink: ${s.shrink};        /* default: 1 */
-  flex-basis: ${s.basis};          /* default: auto */
-  align-self: ${s.alignSelf};      /* default: auto */
+  order: ${s.order};
+  flex-grow: ${s.grow};
+  flex-shrink: ${s.shrink};
+  flex-basis: ${s.basis};
+  align-self: ${s.alignSelf};
   min-width: ${s.minW}px;
   font-size: ${s.fontSize}px;
 }`;
 }
 
 function setDefaults() {
-    // container defaults (gap visible)
     direction.value = "row";
     justify.value = "flex-start";
     alignItems.value = "stretch";
@@ -213,7 +240,6 @@ function setDefaults() {
     containerW.value = 100;
     containerH.value = 320;
 
-    // items
     multiLine.checked = false;
     currentIndex = 0;
 
@@ -226,8 +252,30 @@ function setDefaults() {
     apply();
 }
 
-// listeners
+// THEME
+function setTheme(theme) {
+    root.dataset.theme = theme;
+    localStorage.setItem("flex_sandbox_theme", theme);
+
+    if (theme === "dark") {
+        themeToggle.textContent = "☀️ Mode clair";
+    } else {
+        themeToggle.textContent = "🌙 Mode sombre";
+    }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem("flex_sandbox_theme");
+    if (saved === "dark" || saved === "light") setTheme(saved);
+    else setTheme("light");
+}
+
 function hook() {
+    themeToggle.addEventListener("click", () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        setTheme(next);
+    });
+
     [direction, justify, alignItems, wrap, alignContent, gap, containerW, containerH].forEach(el =>
         el.addEventListener("input", apply)
     );
@@ -258,5 +306,6 @@ function hook() {
 }
 
 // init
+initTheme();
 hook();
 setDefaults();

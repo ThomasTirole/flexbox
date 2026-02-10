@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,16 +11,22 @@
     <div class="topbar__inner">
         <div>
             <h1>Flexbox Sandbox</h1>
-            <p class="subtitle">Joue avec les propriétés du container et d’un item. Le CSS généré s’affiche en bas.</p>
+            <p class="subtitle">Container à gauche, item sélectionné à droite, rendu + axes à droite.</p>
         </div>
-        <button id="reset" class="btn btn--primary" type="button">Reset</button>
+
+        <div class="topbar__actions">
+            <button id="themeToggle" class="btn" type="button" aria-label="Changer le thème">
+                🌙 Mode sombre
+            </button>
+            <button id="reset" class="btn btn--primary" type="button">Reset</button>
+        </div>
     </div>
 </header>
 
 <main class="app">
     <!-- CONTROLS -->
     <section class="controls">
-        <!-- Container card -->
+        <!-- Container -->
         <article class="card">
             <div class="card__head">
                 <h2>Container</h2>
@@ -125,7 +131,7 @@
             </div>
         </article>
 
-        <!-- Item card -->
+        <!-- Item -->
         <article class="card">
             <div class="card__head">
                 <h2>Item sélectionné</h2>
@@ -135,9 +141,7 @@
             <div class="form">
                 <div class="cols2">
                     <div class="field">
-                        <div class="field__label">
-                            <span>Item</span>
-                        </div>
+                        <div class="field__label"><span>Item</span></div>
                         <select id="selectedItem"></select>
                     </div>
 
@@ -223,7 +227,7 @@
                             <span class="nowrap">font-size: <strong><span id="fontValue">16</span>px</strong></span>
                         </div>
                         <input id="fontSize" type="range" min="12" max="36" value="16" />
-                        <p class="help">Utile pour voir <strong>baseline</strong> + textes différents.</p>
+                        <p class="help">Utile pour voir <strong>baseline</strong>.</p>
                     </div>
                 </div>
 
@@ -247,8 +251,25 @@
             </div>
 
             <div class="stage">
-                <div id="container" class="container" aria-label="Flex container">
-                    <!-- items injectés en JS -->
+                <div id="axesWrap" class="axesWrap" data-dir="row">
+                    <!-- Rail du haut -->
+                    <div id="axisTop" class="axis axis--top" data-role="main">
+                        <span class="axis__label">Axe principal</span>
+                        <span class="axis__start">start</span>
+                        <span class="axis__end">end</span>
+                        <div class="axis__line"></div>
+                    </div>
+
+                    <!-- Rail de gauche -->
+                    <div id="axisLeft" class="axis axis--left" data-role="cross">
+                        <span class="axis__label">Axe secondaire</span>
+                        <span class="axis__start">start</span>
+                        <span class="axis__end">end</span>
+                        <div class="axis__line"></div>
+                    </div>
+
+                    <!-- Le container -->
+                    <div id="container" class="container" aria-label="Flex container"></div>
                 </div>
             </div>
         </div>
