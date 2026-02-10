@@ -2,101 +2,161 @@
 
 body {
     font-family: system-ui, Arial, sans-serif;
-    margin: 20px;
+    margin: 16px;
     color: #111;
+    background: #fff;
 }
 
-h1 { margin: 0 0 6px; }
+.top h1 { margin: 0 0 6px; }
+.hint { margin: 0 0 14px; opacity: 0.85; }
 
-.hint {
-    margin: 0 0 14px;
-    opacity: 0.85;
+.layout {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 14px;
+    align-items: start;
 }
 
-.muted { opacity: 0.75; font-size: 12px; }
+@media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; }
+}
 
 .panel {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(180px, 1fr));
-    gap: 12px;
-    padding: 12px;
     border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.panel-head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.panel-head h2 { margin: 0; }
+
+.btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+button {
+    border: 1px solid #bbb;
+    background: #fff;
+    padding: 8px 10px;
     border-radius: 10px;
-    margin-bottom: 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button.primary {
+    border-color: #111;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 1100px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+.group {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.group legend {
+    font-weight: 800;
+    padding: 0 6px;
 }
 
 label {
     display: grid;
     gap: 6px;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 
-select, button {
+select, input[type="range"] {
+    width: 100%;
+}
+
+select {
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #bbb;
-    background: white;
+    background: #fff;
 }
 
-.range { grid-column: span 2; }
+.range span {
+    font-variant-numeric: tabular-nums;
+}
 
 .check {
-    grid-column: span 2;
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
 }
 
-button {
-    cursor: pointer;
-    font-weight: 600;
+.stageWrap {
+    display: grid;
+    gap: 12px;
 }
 
 .stage {
     border: 2px dashed #bbb;
     border-radius: 12px;
     padding: 14px;
-    height: 320px; /* utile pour voir align-items et column */
+    background: #fafafa;
 }
 
 .container {
-    height: 100%;
+    width: 100%;
+    height: 320px; /* modifié via JS */
     border: 2px solid #000;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 12px;
 
-    /* Valeurs initiales (pilotées en JS) */
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: stretch;
     flex-wrap: nowrap;
-    gap: 12px; /* (default = 0) - ici on met 12px pour mieux voir */
+
+    /* on gère gap/row-gap/column-gap via JS */
+    gap: 12px;
+    row-gap: 12px;
+    column-gap: 12px;
 }
 
 .item {
     border: 1px solid #000;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 12px;
-    min-width: 70px;
+    min-width: 70px; /* modifié via JS */
     text-align: center;
-    font-weight: 700;
+    font-weight: 800;
+    line-height: 1.1;
 }
 
-.item small {
-    font-weight: 500;
-    opacity: 0.8;
+.item small { font-weight: 500; opacity: 0.8; }
+
+.item.isSelected {
+    outline: 3px solid #000;
+    outline-offset: 2px;
 }
 
-/* Couleurs simples pour distinguer les items */
-.i1 { background: #d7ecff; }
-.i2 { background: #ffe3d7; }
-.i3 { background: #e3ffd7; }
-.i4 { background: #f0d7ff; }
-.i5 { background: #fff7d7; }
+.cssOutWrap h3 { margin: 0; }
 
 .code {
-    margin-top: 12px;
     padding: 12px;
     border-radius: 12px;
     background: #f5f5f5;
