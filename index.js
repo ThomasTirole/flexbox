@@ -7,8 +7,6 @@ const alignItems = document.getElementById("alignItems");
 const wrap = document.getElementById("wrap");
 const alignContent = document.getElementById("alignContent");
 const gap = document.getElementById("gap");
-const rowGap = document.getElementById("rowGap");
-const colGap = document.getElementById("colGap");
 const containerW = document.getElementById("containerW");
 const containerH = document.getElementById("containerH");
 
@@ -26,8 +24,6 @@ const multiLine = document.getElementById("multiLine");
 
 // Labels
 const gapValue = document.getElementById("gapValue");
-const rowGapValue = document.getElementById("rowGapValue");
-const colGapValue = document.getElementById("colGapValue");
 const wValue = document.getElementById("wValue");
 const hValue = document.getElementById("hValue");
 
@@ -39,15 +35,10 @@ const fontValue = document.getElementById("fontValue");
 const countValue = document.getElementById("countValue");
 
 const cssOut = document.getElementById("cssOut");
-
-// Buttons
 const resetBtn = document.getElementById("reset");
-const presetCenter = document.getElementById("presetCenter");
-const presetWrap = document.getElementById("presetWrap");
-const preset2col = document.getElementById("preset2col");
 
 // Per-item state (so switching selection doesn’t lose settings)
-let itemStates = []; // array of {order,grow,shrink,basis,alignSelf,minW,fontSize}
+let itemStates = [];
 let currentIndex = 0;
 
 function defaultItemState() {
@@ -62,16 +53,24 @@ function defaultItemState() {
     };
 }
 
+function colorClass(i) {
+    // c1..c12 (boucle)
+    const n = (i % 12) + 1;
+    return `c${n}`;
+}
+
 function buildItems(n) {
     container.innerHTML = "";
+
+    // keep existing states when possible
     itemStates = Array.from({ length: n }, (_, i) => itemStates[i] ?? defaultItemState());
 
     for (let i = 0; i < n; i++) {
         const div = document.createElement("div");
-        div.className = "item";
+        div.className = `item ${colorClass(i)}`;
         div.dataset.index = String(i);
 
-        // contenu
+        // content
         if (i === 1) {
             div.innerHTML = multiLine.checked ? `2<br><small>texte</small>` : `2 <small>texte</small>`;
         } else {
@@ -147,15 +146,10 @@ function apply() {
     container.style.alignContent = alignContent.value;
 
     container.style.gap = `${gap.value}px`;
-    container.style.rowGap = `${rowGap.value}px`;
-    container.style.columnGap = `${colGap.value}px`;
-
     container.style.width = `${containerW.value}%`;
     container.style.height = `${containerH.value}px`;
 
     gapValue.textContent = gap.value;
-    rowGapValue.textContent = rowGap.value;
-    colGapValue.textContent = colGap.value;
     wValue.textContent = containerW.value;
     hValue.textContent = containerH.value;
 
@@ -174,7 +168,6 @@ function apply() {
 
         it.classList.toggle("isSelected", i === currentIndex);
 
-        // update item 2 content baseline demo
         if (i === 1) {
             it.innerHTML = multiLine.checked ? `2<br><small>texte</small>` : `2 <small>texte</small>`;
         }
@@ -185,33 +178,31 @@ function apply() {
     cssOut.textContent =
         `/* CONTAINER */
 #container {
-  display: flex;                       /* default */
-  flex-direction: ${direction.value};              /* default: row */
-  justify-content: ${justify.value};             /* default: flex-start */
-  align-items: ${alignItems.value};               /* default: stretch */
-  flex-wrap: ${wrap.value};                    /* default: nowrap */
-  align-content: ${alignContent.value};            /* default: stretch (utile si wrap + plusieurs lignes) */
-  gap: ${gap.value}px;                         /* default: 0 */
-  row-gap: ${rowGap.value}px;                    /* default: normal (souvent 0) */
-  column-gap: ${colGap.value}px;                 /* default: normal (souvent 0) */
+  display: flex;                 /* default */
+  flex-direction: ${direction.value};        /* default: row */
+  justify-content: ${justify.value};       /* default: flex-start */
+  align-items: ${alignItems.value};           /* default: stretch */
+  flex-wrap: ${wrap.value};              /* default: nowrap */
+  align-content: ${alignContent.value};      /* default: stretch (utile si wrap + lignes) */
+  gap: ${gap.value}px;                    /* default: 0 */
   width: ${containerW.value}%;
   height: ${containerH.value}px;
 }
 
 /* ITEM SÉLECTIONNÉ (Item ${currentIndex + 1}) */
 #container .item:nth-child(${currentIndex + 1}) {
-  order: ${s.order};                         /* default: 0 */
-  flex-grow: ${s.grow};                      /* default: 0 */
-  flex-shrink: ${s.shrink};                  /* default: 1 */
-  flex-basis: ${s.basis};                    /* default: auto */
-  align-self: ${s.alignSelf};                /* default: auto */
+  order: ${s.order};               /* default: 0 */
+  flex-grow: ${s.grow};            /* default: 0 */
+  flex-shrink: ${s.shrink};        /* default: 1 */
+  flex-basis: ${s.basis};          /* default: auto */
+  align-self: ${s.alignSelf};      /* default: auto */
   min-width: ${s.minW}px;
   font-size: ${s.fontSize}px;
 }`;
 }
 
 function setDefaults() {
-    // container defaults (we start with visible gaps)
+    // container defaults (gap visible)
     direction.value = "row";
     justify.value = "flex-start";
     alignItems.value = "stretch";
@@ -219,94 +210,34 @@ function setDefaults() {
     alignContent.value = "stretch";
 
     gap.value = 12;
-    rowGap.value = 12;
-    colGap.value = 12;
-
     containerW.value = 100;
     containerH.value = 320;
-
-    multiLine.checked = false;
 
     // items
+    multiLine.checked = false;
     currentIndex = 0;
-    const n = Number(count.value) || 5;
-    buildItems(n);
-    itemStates = itemStates.map(() => defaultItemState());
-    syncItemControlsFromState();
 
-    // labels count
+    const n = Number(count.value) || 5;
     countValue.textContent = String(n);
 
-    apply();
-}
+    itemStates = Array.from({ length: n }, () => defaultItemState());
+    buildItems(n);
 
-function applyPresetCenter() {
-    direction.value = "row";
-    wrap.value = "nowrap";
-    justify.value = "center";
-    alignItems.value = "center";
-    alignContent.value = "stretch";
-    gap.value = 12;
-    rowGap.value = 12;
-    colGap.value = 12;
-    containerW.value = 100;
-    containerH.value = 320;
-    apply();
-}
-
-function applyPresetWrap() {
-    direction.value = "row";
-    wrap.value = "wrap";
-    justify.value = "flex-start";
-    alignItems.value = "flex-start";
-    alignContent.value = "space-between";
-    gap.value = 12;
-    rowGap.value = 12;
-    colGap.value = 12;
-
-    // make items wider to force wrap
-    itemStates.forEach(s => { s.minW = 160; });
-    syncItemControlsFromState();
-
-    apply();
-}
-
-function applyPreset2col() {
-    // “2 colonnes” = wrap + basis 50% + border-box se gère via padding, ici on montre l’idée avec basis
-    direction.value = "row";
-    wrap.value = "wrap";
-    justify.value = "flex-start";
-    alignItems.value = "stretch";
-    alignContent.value = "stretch";
-    gap.value = 12;
-    rowGap.value = 12;
-    colGap.value = 12;
-
-    itemStates.forEach(s => {
-        s.basis = "50%";
-        s.grow = 0;
-        s.shrink = 1;
-        s.minW = 120;
-    });
-    syncItemControlsFromState();
     apply();
 }
 
 // listeners
 function hook() {
-    // Container controls
-    [direction, justify, alignItems, wrap, alignContent, gap, rowGap, colGap, containerW, containerH].forEach(el =>
-        el.addEventListener("input", () => apply())
+    [direction, justify, alignItems, wrap, alignContent, gap, containerW, containerH].forEach(el =>
+        el.addEventListener("input", apply)
     );
 
-    // Selected item switch
     selectedItem.addEventListener("input", () => {
         currentIndex = Number(selectedItem.value);
         syncItemControlsFromState();
         apply();
     });
 
-    // Item controls (save -> apply)
     [order, grow, shrink, basis, alignSelf, minW, fontSize].forEach(el =>
         el.addEventListener("input", () => {
             saveItemControlsToState();
@@ -314,7 +245,6 @@ function hook() {
         })
     );
 
-    // Items count rebuild
     count.addEventListener("input", () => {
         const n = Number(count.value);
         countValue.textContent = String(n);
@@ -322,14 +252,9 @@ function hook() {
         apply();
     });
 
-    // Baseline demo toggle
-    multiLine.addEventListener("input", () => apply());
+    multiLine.addEventListener("input", apply);
 
-    // Buttons
     resetBtn.addEventListener("click", setDefaults);
-    presetCenter.addEventListener("click", applyPresetCenter);
-    presetWrap.addEventListener("click", applyPresetWrap);
-    preset2col.addEventListener("click", applyPreset2col);
 }
 
 // init

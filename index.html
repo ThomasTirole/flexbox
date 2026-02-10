@@ -3,82 +3,92 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Flexbox Sandbox (Géant)</title>
+    <title>Flexbox Sandbox</title>
     <link rel="stylesheet" href="main.css" />
 </head>
 <body>
-<header class="top">
-    <h1>Flexbox Sandbox (Géant)</h1>
-    <p class="hint">
-        Objectif: comprendre Flexbox en jouant. À gauche: container. À droite: item sélectionné.
-        En bas: CSS généré.
-    </p>
+<header class="topbar">
+    <div class="topbar__inner">
+        <div>
+            <h1>Flexbox Sandbox</h1>
+            <p class="subtitle">Joue avec les propriétés du container et d’un item. Le CSS généré s’affiche en bas.</p>
+        </div>
+        <button id="reset" class="btn btn--primary" type="button">Reset</button>
+    </div>
 </header>
 
-<main class="layout">
+<main class="app">
     <!-- CONTROLS -->
-    <section class="panel">
-        <div class="panel-head">
-            <h2>Réglages</h2>
-            <div class="btns">
-                <button id="presetCenter" type="button">Preset: centrer</button>
-                <button id="presetWrap" type="button">Preset: wrap demo</button>
-                <button id="preset2col" type="button">Preset: 2 colonnes</button>
-                <button id="reset" type="button" class="primary">Reset</button>
+    <section class="controls">
+        <!-- Container card -->
+        <article class="card">
+            <div class="card__head">
+                <h2>Container</h2>
+                <span class="pill">display: flex</span>
             </div>
-        </div>
 
-        <div class="grid">
-            <!-- CONTAINER -->
-            <fieldset class="group">
-                <legend>Container</legend>
-
-                <label>
-                    flex-direction
+            <div class="form">
+                <div class="field">
+                    <div class="field__label">
+                        <span>flex-direction</span>
+                        <span class="badge">default: row</span>
+                    </div>
                     <select id="direction">
-                        <option value="row" selected>row (default)</option>
+                        <option value="row" selected>row</option>
                         <option value="row-reverse">row-reverse</option>
                         <option value="column">column</option>
                         <option value="column-reverse">column-reverse</option>
                     </select>
-                </label>
+                </div>
 
-                <label>
-                    justify-content (axe principal)
+                <div class="field">
+                    <div class="field__label">
+                        <span>justify-content</span>
+                        <span class="badge">default: flex-start</span>
+                    </div>
                     <select id="justify">
-                        <option value="flex-start" selected>flex-start (default)</option>
+                        <option value="flex-start" selected>flex-start</option>
                         <option value="center">center</option>
                         <option value="flex-end">flex-end</option>
                         <option value="space-between">space-between</option>
                         <option value="space-around">space-around</option>
                         <option value="space-evenly">space-evenly</option>
                     </select>
-                </label>
+                </div>
 
-                <label>
-                    align-items (axe secondaire)
+                <div class="field">
+                    <div class="field__label">
+                        <span>align-items</span>
+                        <span class="badge">default: stretch</span>
+                    </div>
                     <select id="alignItems">
-                        <option value="stretch" selected>stretch (default)</option>
+                        <option value="stretch" selected>stretch</option>
                         <option value="flex-start">flex-start</option>
                         <option value="center">center</option>
                         <option value="flex-end">flex-end</option>
                         <option value="baseline">baseline</option>
                     </select>
-                </label>
+                </div>
 
-                <label>
-                    flex-wrap
+                <div class="field">
+                    <div class="field__label">
+                        <span>flex-wrap</span>
+                        <span class="badge">default: nowrap</span>
+                    </div>
                     <select id="wrap">
-                        <option value="nowrap" selected>nowrap (default)</option>
+                        <option value="nowrap" selected>nowrap</option>
                         <option value="wrap">wrap</option>
                         <option value="wrap-reverse">wrap-reverse</option>
                     </select>
-                </label>
+                </div>
 
-                <label>
-                    align-content (lignes; utile avec wrap)
+                <div class="field">
+                    <div class="field__label">
+                        <span>align-content</span>
+                        <span class="badge">default: stretch</span>
+                    </div>
                     <select id="alignContent">
-                        <option value="stretch" selected>stretch (default)</option>
+                        <option value="stretch" selected>stretch</option>
                         <option value="flex-start">flex-start</option>
                         <option value="center">center</option>
                         <option value="flex-end">flex-end</option>
@@ -86,118 +96,168 @@
                         <option value="space-around">space-around</option>
                         <option value="space-evenly">space-evenly</option>
                     </select>
-                </label>
+                    <p class="help">Agit surtout quand <strong>wrap</strong> crée plusieurs lignes.</p>
+                </div>
 
-                <label class="range">
-                    gap: <span id="gapValue">12</span>px
+                <div class="field">
+                    <div class="field__label">
+                        <span class="nowrap">gap: <strong><span id="gapValue">12</span>px</strong></span>
+                        <span class="badge">default: 0</span>
+                    </div>
                     <input id="gap" type="range" min="0" max="40" value="12" />
-                </label>
+                </div>
 
-                <label class="range">
-                    row-gap: <span id="rowGapValue">12</span>px
-                    <input id="rowGap" type="range" min="0" max="40" value="12" />
-                </label>
+                <div class="cols2">
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">largeur: <strong><span id="wValue">100</span>%</strong></span>
+                        </div>
+                        <input id="containerW" type="range" min="40" max="100" value="100" />
+                    </div>
 
-                <label class="range">
-                    column-gap: <span id="colGapValue">12</span>px
-                    <input id="colGap" type="range" min="0" max="40" value="12" />
-                </label>
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">hauteur: <strong><span id="hValue">320</span>px</strong></span>
+                        </div>
+                        <input id="containerH" type="range" min="180" max="520" value="320" />
+                    </div>
+                </div>
+            </div>
+        </article>
 
-                <label class="range">
-                    largeur container: <span id="wValue">100</span>%
-                    <input id="containerW" type="range" min="40" max="100" value="100" />
-                </label>
+        <!-- Item card -->
+        <article class="card">
+            <div class="card__head">
+                <h2>Item sélectionné</h2>
+                <span class="pill">propriétés d’un enfant</span>
+            </div>
 
-                <label class="range">
-                    hauteur container: <span id="hValue">320</span>px
-                    <input id="containerH" type="range" min="180" max="520" value="320" />
-                </label>
-            </fieldset>
+            <div class="form">
+                <div class="cols2">
+                    <div class="field">
+                        <div class="field__label">
+                            <span>Item</span>
+                        </div>
+                        <select id="selectedItem"></select>
+                    </div>
 
-            <!-- ITEM -->
-            <fieldset class="group">
-                <legend>Item (sélection)</legend>
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">Nombre d’items: <strong><span id="countValue">5</span></strong></span>
+                        </div>
+                        <input id="count" type="range" min="3" max="12" value="5" />
+                    </div>
+                </div>
 
-                <label>
-                    item sélectionné
-                    <select id="selectedItem"></select>
-                </label>
+                <div class="cols2">
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">order: <strong><span id="orderValue">0</span></strong></span>
+                            <span class="badge">default: 0</span>
+                        </div>
+                        <input id="order" type="range" min="-5" max="10" value="0" />
+                    </div>
 
-                <label class="range">
-                    order: <span id="orderValue">0</span>
-                    <input id="order" type="range" min="-5" max="10" value="0" />
-                </label>
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">align-self</span>
+                            <span class="badge">default: auto</span>
+                        </div>
+                        <select id="alignSelf">
+                            <option value="auto" selected>auto</option>
+                            <option value="stretch">stretch</option>
+                            <option value="flex-start">flex-start</option>
+                            <option value="center">center</option>
+                            <option value="flex-end">flex-end</option>
+                            <option value="baseline">baseline</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label class="range">
-                    flex-grow: <span id="growValue">0</span>
-                    <input id="grow" type="range" min="0" max="5" value="0" />
-                </label>
+                <div class="cols3">
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">flex-grow: <strong><span id="growValue">0</span></strong></span>
+                            <span class="badge">default: 0</span>
+                        </div>
+                        <input id="grow" type="range" min="0" max="5" value="0" />
+                    </div>
 
-                <label class="range">
-                    flex-shrink: <span id="shrinkValue">1</span>
-                    <input id="shrink" type="range" min="0" max="5" value="1" />
-                </label>
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">flex-shrink: <strong><span id="shrinkValue">1</span></strong></span>
+                            <span class="badge">default: 1</span>
+                        </div>
+                        <input id="shrink" type="range" min="0" max="5" value="1" />
+                    </div>
 
-                <label>
-                    flex-basis
-                    <select id="basis">
-                        <option value="auto" selected>auto (default)</option>
-                        <option value="0">0</option>
-                        <option value="80px">80px</option>
-                        <option value="120px">120px</option>
-                        <option value="160px">160px</option>
-                        <option value="200px">200px</option>
-                        <option value="25%">25%</option>
-                        <option value="33.33%">33.33%</option>
-                        <option value="50%">50%</option>
-                    </select>
-                </label>
+                    <div class="field">
+                        <div class="field__label">
+                            <span>flex-basis</span>
+                            <span class="badge">default: auto</span>
+                        </div>
+                        <select id="basis">
+                            <option value="auto" selected>auto</option>
+                            <option value="0">0</option>
+                            <option value="80px">80px</option>
+                            <option value="120px">120px</option>
+                            <option value="160px">160px</option>
+                            <option value="200px">200px</option>
+                            <option value="25%">25%</option>
+                            <option value="33.33%">33.33%</option>
+                            <option value="50%">50%</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label>
-                    align-self (sur l’axe secondaire)
-                    <select id="alignSelf">
-                        <option value="auto" selected>auto (default)</option>
-                        <option value="stretch">stretch</option>
-                        <option value="flex-start">flex-start</option>
-                        <option value="center">center</option>
-                        <option value="flex-end">flex-end</option>
-                        <option value="baseline">baseline</option>
-                    </select>
-                </label>
+                <div class="cols2">
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">min-width: <strong><span id="minWValue">70</span>px</strong></span>
+                        </div>
+                        <input id="minW" type="range" min="40" max="240" value="70" />
+                    </div>
 
-                <label class="range">
-                    min-width item: <span id="minWValue">70</span>px
-                    <input id="minW" type="range" min="40" max="240" value="70" />
-                </label>
+                    <div class="field">
+                        <div class="field__label">
+                            <span class="nowrap">font-size: <strong><span id="fontValue">16</span>px</strong></span>
+                        </div>
+                        <input id="fontSize" type="range" min="12" max="36" value="16" />
+                        <p class="help">Utile pour voir <strong>baseline</strong> + textes différents.</p>
+                    </div>
+                </div>
 
-                <label class="range">
-                    font-size item: <span id="fontValue">16</span>px
-                    <input id="fontSize" type="range" min="12" max="36" value="16" />
-                </label>
-
-                <label class="range">
-                    nombre d’items: <span id="countValue">5</span>
-                    <input id="count" type="range" min="3" max="12" value="5" />
-                </label>
-
-                <label class="check">
+                <label class="toggle">
                     <input id="multiLine" type="checkbox" />
-                    Item 2 avec texte sur 2 lignes (baseline)
+                    <span>Item 2 en multi-ligne (démo baseline)</span>
                 </label>
-            </fieldset>
-        </div>
+            </div>
+        </article>
     </section>
 
-    <!-- STAGE -->
-    <section class="stageWrap">
-        <div class="stage">
-            <div id="container" class="container" aria-label="Flex container">
-                <!-- items injectés en JS -->
+    <!-- STAGE + CSS -->
+    <section class="stageArea">
+        <div class="stageCard">
+            <div class="stageHead">
+                <h2>Résultat</h2>
+                <div class="stageHint">
+                    <span class="dot"></span>
+                    Clique un item pour le sélectionner
+                </div>
+            </div>
+
+            <div class="stage">
+                <div id="container" class="container" aria-label="Flex container">
+                    <!-- items injectés en JS -->
+                </div>
             </div>
         </div>
 
-        <div class="cssOutWrap">
-            <h3>CSS généré</h3>
+        <div class="card">
+            <div class="card__head">
+                <h2>CSS généré</h2>
+                <span class="pill">copiable</span>
+            </div>
             <pre class="code"><code id="cssOut"></code></pre>
         </div>
     </section>
